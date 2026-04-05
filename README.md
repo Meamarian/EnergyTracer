@@ -11,17 +11,6 @@ Mohsen Memarian, Andreas Kassler, Karl-Johan Grinnemo, Sándor Laki, Gergely Pon
 
 EnergyTracer was designed to help developers and researchers understand the energy cost of dataplane behavior in DPDK-based systems. It combines low-overhead DPDK fast-path tracing, Linux kernel power-state tracing, and hardware energy sampling, then synchronizes them into a single analysis-ready database.
 
-## What this repository provides
-
-This repository contains the main modules needed to:
-
-- trace Linux CPU power states and energy samples,
-- export DPDK trace data,
-- synchronize both sides into one unified database,
-- generate charts and visualizations,
-- run the DPDK test application,
-- and generate controlled bursty traffic with TRex.
-
 ## Repository guides
 
 The repository includes several README files for different parts of the workflow:
