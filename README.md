@@ -39,10 +39,6 @@ At a high level, the workflow is:
 6. **Validate synchronization** with `Validator/sync_checker.py`
 7. **Generate visualizations** with `chart.py`
 
-## Purpose of the project
-
-DPDK-based systems provide very high packet-processing performance, but their energy behavior is often hard to understand. Traditional tools usually show either execution traces or coarse-grained power metrics, but not both together. EnergyTracer addresses this gap by directly correlating packet-processing events with CPU power states and energy measurements, enabling detailed energy-aware analysis of packet-processing systems.
-
 
 ## Notes
 
