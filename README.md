@@ -7,7 +7,12 @@ This repository belongs to the **EnergyTracer** project described in the paper:
 **EnergyTracer: Energy Analysis of Packet Processing Events in DPDK-Based Applications**
 
 **Authors:**  
-Mohsen Memarian, Andreas Kassler, Karl-Johan Grinnemo, Sándor Laki, Gergely Pongracz, Johan Forsman
+Mohsen Memarian — Computer Science Department, Karlstad University, Karlstad, Sweden  
+Andreas Kassler — Computer Science Department, Karlstad University, Karlstad, Sweden; Institute of Applied Computer Science, Deggendorf Institute of Technology, Deggendorf, Germany  
+Karl-Johan Grinnemo — Computer Science Department, Karlstad University, Karlstad, Sweden  
+Sándor Laki — Faculty of Informatics, ELTE Eötvös Loránd University, Budapest, Hungary  
+Gergely Pongracz — Ericsson Research, Budapest, Hungary  
+Johan Forsman — TietoEvry, Umeå, Sweden
 
 EnergyTracer was designed to help developers and researchers understand the energy cost of dataplane behavior in DPDK-based systems. It combines low-overhead DPDK fast-path tracing, Linux kernel power-state tracing, and hardware energy sampling, then synchronizes them into a single analysis-ready database.
 
