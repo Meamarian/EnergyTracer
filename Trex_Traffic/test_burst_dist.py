@@ -75,24 +75,36 @@ def build_packet_builders(pktsize: int, distribute: int):
     return builders
 
 
-def build_schedule(burst_us: int, gap_ms: float, bursts: int, start_delay_us: float):
+def build_schedule(pps_mpps: float, burst_us: int, gap_ms: float, bursts: int, start_delay_us: float):
     """
-    One packet every 1 us inside each burst.
-    Total packets = burst_us * bursts
-    when burst_us is an integer.
+    Build a burst schedule where --pps is interpreted as MPPS.
 
-    Returns a list of (packet_index, absolute_time_us).
+    Examples:
+      pps_mpps = 1.0  -> 1 packet every 1 us
+      pps_mpps = 0.5  -> 1 packet every 2 us
+      pps_mpps = 2.0  -> 1 packet every 0.5 us
+
+    burst_us keeps its meaning as burst duration in microseconds.
+    gap_ms keeps its meaning as gap between bursts in milliseconds.
     """
-    schedule = []
+    if pps_mpps <= 0:
+        raise ValueError("--pps must be > 0")
+
+    pps = pps_mpps * 1_000_000.0
+    interval_us = 1_000_000.0 / pps
     gap_us = gap_ms * 1000.0
+
+    schedule = []
     pkt_idx = 0
 
     for burst_idx in range(bursts):
         base_t = start_delay_us + burst_idx * (burst_us + gap_us)
+        t_us = 0.0
 
-        for offset_us in range(burst_us):
-            schedule.append((pkt_idx, base_t + float(offset_us)))
+        while t_us < float(burst_us):
+            schedule.append((pkt_idx, base_t + t_us))
             pkt_idx += 1
+            t_us += interval_us
 
     return schedule
 
@@ -100,6 +112,7 @@ def build_schedule(burst_us: int, gap_ms: float, bursts: int, start_delay_us: fl
 def build_streams(args):
     packet_builders = build_packet_builders(args.pktsize, args.distribute)
     schedule = build_schedule(
+        pps_mpps=args.pps,
         burst_us=args.burst_us,
         gap_ms=args.gap_ms,
         bursts=args.bursts,
@@ -137,8 +150,11 @@ def build_streams(args):
         )
 
     print(
-        f"[profile] packets={len(schedule)} "
-        f"(burst_us={args.burst_us} * bursts={args.bursts}), "
+        f"[profile] packets={len(schedule)}, "
+        f"pps={args.pps} Mpps, "
+        f"burst_us={args.burst_us}, "
+        f"gap_ms={args.gap_ms}, "
+        f"bursts={args.bursts}, "
         f"distribute={args.distribute}"
     )
 
@@ -153,7 +169,7 @@ def get_streams(direction=0, **kwargs):
     TRex entry point.
 
     Example:
-      start -f stl/test_burst.py -p 0 -d 15 -t --pktsize 128 --bursty --pps 1 --burst_us 300 --gap_ms 100 --bursts 40 --distribute 8
+      start -f stl/test_burst.py -p 0 -d 15 -t --pktsize 128 --bursty --pps 0.5 --burst_us 300 --gap_ms 100 --bursts 40 --dist 8
     """
     parser = argparse.ArgumentParser(add_help=False)
 
@@ -162,9 +178,12 @@ def get_streams(direction=0, **kwargs):
     parser.add_argument("--gap_ms", type=float, default=100.0)
     parser.add_argument("--bursts", type=int, default=40)
     parser.add_argument("--start_delay_us", type=float, default=0.0)
-    parser.add_argument("--distribute", type=int, choices=range(1, 9), default=1)
+    parser.add_argument("--distribute", "--dist", dest="distribute",
+                        type=int, choices=range(1, 9), default=1)
 
-    # kept only so your old command still parses cleanly
+    # --pps is interpreted as MPPS to preserve your old usage style:
+    #   --pps 1.0  -> 1 Mpps
+    #   --pps 0.5  -> 0.5 Mpps
     parser.add_argument("--pps", type=float, default=1.0)
     parser.add_argument("--bursty", action="store_true", default=False)
 
