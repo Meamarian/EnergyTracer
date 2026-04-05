@@ -21,7 +21,7 @@ The repository includes several README files for different parts of the workflow
 
 - **TRex traffic generation guide**  
   Located in the `Trex_Traffic` folder.  
-  Explains how to use the TRex traffic profile, how bursts are generated, how `--pps`, `--burst_us`, and `--distribute` work, and how to run the script from the TRex console.
+  Explains how to use the TRex traffic profile, how bursts are generated, and how to run the script from the TRex console.
 
 - **EnergyTracer run guide**  
   Located in the EnergyTracer workflow folder or project root, depending on your layout.  
