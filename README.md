@@ -42,4 +42,4 @@ At a high level, the workflow is:
 
 ## Notes
 
-For detailed instructions, users should start with the child README files in the relevant subfolders. The top-level README is meant to give a short overview of the project and help readers quickly find the right guide for each part of the workflow.
+For detailed instructions, start with the sub-README files in the relevant subfolders.
